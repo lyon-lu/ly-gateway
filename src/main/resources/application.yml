@@ -28,8 +28,17 @@ spring:
             key-resolver: "#{@remoteAddrKeyResolver}"
             rate-limiter: "#{@redisRateLimiter}"
             
-        - SecurityFilter
+        - TokenVerification
         
-        #- RequestRateLimiter=10, 20, #{@principalNameKeyResolver}
         predicates:
-        - Path=/gateway
+        - Header=token, ASDFGH
+
+custom:
+    replenishRate: 100
+    burstCapacity: 200
+    token-list:
+      - channel: heqiauto
+        token: ASDFGH 
+        
+      - channel: heqitest
+        token: ASDFGH    

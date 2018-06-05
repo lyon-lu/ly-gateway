@@ -1,18 +1,20 @@
 package com.study.gateway;
 
+import javax.annotation.Resource;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.gateway.filter.ratelimit.RedisRateLimiter;
 import org.springframework.context.annotation.Bean;
 
+import com.study.gateway.config.CustomConfig;
 import com.study.gateway.filter.RemoteAddrKeyResolver;
 
 @SpringBootApplication
 public class GatewayApplication {
-
-	public static void main(String[] args) {
-		SpringApplication.run(GatewayApplication.class, args);
-	}
+	
+	@Resource
+	private CustomConfig customConfig;
 	
 	@Bean(name = RemoteAddrKeyResolver.BEAN_NAME)
 	public RemoteAddrKeyResolver remoteAddrKeyResolver() {
@@ -23,21 +25,10 @@ public class GatewayApplication {
 	@Bean(name = "redisRateLimiter")
 	public RedisRateLimiter redisRateLimiter() {
 		
-		return new RedisRateLimiter(1000,2000);
+		return new RedisRateLimiter(customConfig.getReplenishRate(),customConfig.getBurstCapacity());
 	}
 	
-	/*@Bean
-    public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
-		 
-		return builder.routes()
-			        .route(r -> r.path("/gateway")
-			          .filters(f -> f.filter(new SecurityFilter())
-			        		  .preserveHostHeader()
-			        		  .modifyResponseBody(String.class, String.class, (exchange, s) -> {
-                                    System.out.println("modifyResponseBody----" + s);
-			        			  return s;
-                                }))
-			          .uri("http://172.18.188.160:8081"))
-			        .build();
-    }*/
+	public static void main(String[] args) {
+		SpringApplication.run(GatewayApplication.class, args);
+	}
 }
