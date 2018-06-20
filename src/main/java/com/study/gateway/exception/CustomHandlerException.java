@@ -27,11 +27,7 @@ public class CustomHandlerException implements ErrorWebExceptionHandler
     @Override
     public Mono<Void> handle(ServerWebExchange exchange, Throwable ex)
     {
-        /*System.out.println("CustomHandlerException run -----------------");
-        ServerHttpResponse response = exchange.getResponse();
-        response.setStatusCode(HttpStatus.MOVED_PERMANENTLY);
-        DataBuffer wrap = response.bufferFactory().wrap("12345".getBytes(StandardCharsets.UTF_8));
-        return response.writeWith(Mono.just(wrap));*/
+        System.out.println("error ------------------------------");
         return Mono.error(ex);
     }
 }

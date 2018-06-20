@@ -61,7 +61,7 @@ public class TokenVerificationGatewayFilterFactory extends AbstractGatewayFilter
     public GatewayFilter apply(NameConfig config)
     {
         return (exchange, chain) -> {
-            
+        	
             CommonResult result = new CommonResult();
             
             try
@@ -121,14 +121,14 @@ public class TokenVerificationGatewayFilterFactory extends AbstractGatewayFilter
         String channel = headers.getFirst("channelCode");
         String token = headers.getFirst("accessToken");
         
-        if(StringUtils.isBlank(token) && !tokenMap.containsKey(token))
+        if(StringUtils.isBlank(token) || !tokenMap.containsKey(token))
         {
             // token为空或不存在
             logger.error("Invalidate accessToken");
             throw new SysException(ResultStatus.INVALID_TOKEN.getMessage());
         }
         
-        if(StringUtils.isBlank(channel) && !channel.equalsIgnoreCase(tokenMap.get(token)))
+        if(StringUtils.isBlank(channel) || !channel.equalsIgnoreCase(tokenMap.get(token)))
         {
             // channel为空
             logger.error("Invalidate channelCode");
