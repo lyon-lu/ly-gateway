@@ -27,36 +27,17 @@ spring:
             key-resolver: "#{@tokenInfoKeyResolver}"
             rate-limiter: "#{@redisRateLimiter}"
             
-        - TokenVerification
-        
-        
-        - name: HystrixCustom
-          args:
-            name: authHystrixCommand
-            fallbackUri: forward:/fallback
-              
+        #- TokenVerification
+            
       routes:
       # 企业接口
       - id: enterprise_route
-        uri: http://localhost:8050
+        uri: lb://LY-SERVER
         predicates:
-          - Path= /server/ent/**
+          - Path= /test/**
           
         filters:
-          #- SetResponseHeader=X-Response-Foo, ent
-          
-      
-      # 用户接口
-      - id: user_route
-        uri: http://localhost:8050
-        
-        predicates:
-          - Path= /security/user/**
-          
-        filters:
-        
-          #- SetResponseHeader=X-Response-Foo, user
-          
+          - DataPreprocess
 
 custom:
     replenishRate: 1
