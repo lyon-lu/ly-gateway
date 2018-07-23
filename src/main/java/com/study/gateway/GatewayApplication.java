@@ -14,8 +14,8 @@ import com.study.gateway.config.CustomConfig;
 
 import reactor.core.publisher.Mono;
 
-@SpringBootApplication
 @EnableFeignClients
+@SpringBootApplication
 public class GatewayApplication {
 	
 	@Resource

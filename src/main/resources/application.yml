@@ -34,11 +34,15 @@ spring:
       - id: enterprise_route
         uri: lb://LY-SERVER
         predicates:
-          - Path= sf/input/**
+          - Path= /sf/input/**
           
         filters:
-          - DataPreprocess
-
+          - name: DataPreprocess
+            args:
+              request-bean:
+                input: com.study.gateway.jaxb.pojo.ItemRequestXml
+                test: test
+                
 custom:
     replenishRate: 1
     burstCapacity: 2
@@ -54,7 +58,7 @@ hystrix:
       execution:
         isolation:
           thread:
-            timeoutInMilliseconds: 3000
+            timeoutInMilliseconds: 30000
                               
 logging:
   level:

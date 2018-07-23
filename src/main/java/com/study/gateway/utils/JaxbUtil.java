@@ -8,6 +8,7 @@ package com.study.gateway.utils;
 
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
@@ -33,7 +34,7 @@ public class JaxbUtil
      */
     public static String convertToXml(Object obj)
     {
-        return convertToXml(obj, "UTF-8");
+        return convertToXml(obj, StandardCharsets.UTF_8.name());
     }
 
     /**

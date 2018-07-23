@@ -19,4 +19,6 @@ public class CharConstant
 {
     /** empty string */
     public static final String EMPTY = "";
+    
+    public static final String SEPARATOR = "/";
 }

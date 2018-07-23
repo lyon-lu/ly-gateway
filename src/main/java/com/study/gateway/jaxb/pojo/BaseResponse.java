@@ -2,7 +2,7 @@
  * Copyright (C) Skywares Information Technology, LTD. 
  * All Rights Reserved.
  *
- * BaseRequest.java created on Jul 17, 2018 8:57:25 AM by Lyon Lu 
+ * BaseResponse.java created on Jul 17, 2018 2:25:45 PM by Lyon Lu 
  */
 package com.study.gateway.jaxb.pojo;
 
@@ -17,54 +17,26 @@ import javax.xml.bind.annotation.XmlAttribute;
  * Description:
  * 
  * @author Lyon Lu
- * @date Jul 17, 2018 8:57:25 AM
+ * @date Jul 17, 2018 2:25:45 PM
  *
  * </pre>
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public class BaseRequest implements Serializable
+public class BaseResponse implements Serializable
 {
     /**
     * @fields serialVersionUID : TODO
     */
-    private static final long serialVersionUID = 6963315753097933251L;
-
+    private static final long serialVersionUID = 7601547677977654596L;
+    
     @XmlAttribute
     private String service;
     
     @XmlAttribute
     private String lang;
     
-    public Head Head;
+    private String Head;
     
-    @XmlAccessorType(XmlAccessType.FIELD)
-    public static class Head
-    {
-        private String AccessCode;
-        
-        private String Checkword;
-
-        public String getAccessCode()
-        {
-            return AccessCode;
-        }
-
-        public void setAccessCode(String accessCode)
-        {
-            AccessCode = accessCode;
-        }
-
-        public String getCheckword()
-        {
-            return Checkword;
-        }
-
-        public void setCheckword(String checkword)
-        {
-            Checkword = checkword;
-        }
-    }
-
     public String getService()
     {
         return service;
@@ -85,12 +57,12 @@ public class BaseRequest implements Serializable
         this.lang = lang;
     }
 
-    public Head getHead()
+    public String getHead()
     {
         return Head;
     }
 
-    public void setHead(Head head)
+    public void setHead(String head)
     {
         Head = head;
     }

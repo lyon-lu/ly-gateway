@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.study.gateway.client.InputClient;
 import com.study.gateway.jaxb.pojo.ItemRequestXml;
+import com.study.gateway.jaxb.pojo.ItemResponseXml;
 
 /**
  * <pre>
@@ -24,10 +25,10 @@ import com.study.gateway.jaxb.pojo.ItemRequestXml;
 public class InputClientFallback extends AbstractFallback implements InputClient
 {
     @Override
-    public ItemRequestXml input(ItemRequestXml xml)
+    public ItemResponseXml input(ItemRequestXml xml)
     {
         logger.error("input fallback");
-        return new ItemRequestXml();
+        return new ItemResponseXml();
     }
 
 }
