@@ -20,13 +20,22 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import com.study.gateway.client.InputClient;
 import com.study.gateway.common.CharConstant;
+import com.study.gateway.jaxb.pojo.BaseRequest.Head;
+import com.study.gateway.jaxb.pojo.ItemRequestXml;
+import com.study.gateway.jaxb.pojo.ItemRequestXml.Body;
+import com.study.gateway.jaxb.pojo.ItemRequestXml.ItemRequest;
 import com.study.gateway.utils.JaxbUtil;
 
 import reactor.core.publisher.Flux;
@@ -55,6 +64,39 @@ public class DataPreprocessGatewayFilterFactory extends AbstractGatewayFilterFac
     public GatewayFilter apply(Config config)
     {
         return (exchange, chain) -> {
+            
+            ItemRequestXml xml = new ItemRequestXml();
+            xml.setLang("zh-CN");
+            xml.setService("ITEM_QUERY_SERVICE");
+            
+            Head head = new Head();
+            head.setAccessCode("qwerty");
+            head.setCheckword("asdfgh");
+            xml.setHead(head);
+            
+            ItemRequest item = new ItemRequest();
+            item.setCode("123");
+            
+            Body body1 = new Body();
+            body1.setItemRequest(item);
+            xml.setBody(body1);
+            
+            String xmlStr1 = JaxbUtil.convertToXml(xml);
+            
+            
+            MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
+            formData.add("name1","value1");
+            formData.add("name2","value2");
+            Mono<String> bodyToMono = WebClient.create().post()
+                    .uri("http://localhost:8082/success")
+                    .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                    .body(BodyInserters.fromFormData(formData))
+                    .retrieve().bodyToMono(String.class);
+            
+            String block = bodyToMono.block();
+            System.out.println(block);
+            
+            
             
             ServerHttpRequest request = exchange.getRequest();
             

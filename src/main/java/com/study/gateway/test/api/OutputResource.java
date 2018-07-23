@@ -6,10 +6,6 @@
  */
 package com.study.gateway.test.api;
 
-import java.util.Optional;
-
-import org.springframework.core.io.buffer.DataBuffer;
-import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,12 +36,12 @@ public class OutputResource
     {
         String xmlStr = JaxbUtil.convertToXml(xml);
         
-        Mono<DataBuffer> bodyToMono = WebClient.create().post().uri("http://localhost:8082/xml")
+        Mono<String> bodyToMono = WebClient.create().post().uri("http://localhost:8082/xml")
         .contentType(MediaType.APPLICATION_XML)
         .body(BodyInserters.fromObject(xmlStr))
-        .retrieve().bodyToMono(DataBuffer.class);
+        .retrieve().bodyToMono(String.class);
         
-        DataBuffer block = bodyToMono.block();
+        String block = bodyToMono.block();
         //ItemResponseXml xmlBean = JaxbUtil.converyToJavaBean(block, ItemResponseXml.class);
         
         return null;
