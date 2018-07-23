@@ -6,18 +6,26 @@
  */
 package com.study.gateway.filter;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+
+import javax.annotation.Resource;
+
+import org.apache.commons.io.IOUtils;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
-import org.springframework.core.io.buffer.NettyDataBuffer;
-import org.springframework.http.HttpHeaders;
+import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 
-import io.netty.handler.codec.http.DefaultHttpHeaders;
-import io.netty.handler.codec.http.HttpMethod;
-import reactor.ipc.netty.NettyPipeline;
-import reactor.ipc.netty.http.client.HttpClient;
-import reactor.ipc.netty.http.client.HttpClientRequest;
+import com.study.gateway.client.InputClient;
+import com.study.gateway.jaxb.pojo.ItemRequestXml;
+import com.study.gateway.utils.JaxbUtil;
+
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 /**
  * <pre>
@@ -31,6 +39,9 @@ import reactor.ipc.netty.http.client.HttpClientRequest;
 @Component
 public class DataPreprocessGatewayFilterFactory extends AbstractGatewayFilterFactory<DataPreprocessGatewayFilterFactory.Config>
 {
+    @Resource
+    private InputClient inputClient;
+    
     public DataPreprocessGatewayFilterFactory()
     {
         super(Config.class);
@@ -39,27 +50,50 @@ public class DataPreprocessGatewayFilterFactory extends AbstractGatewayFilterFac
     public GatewayFilter apply(Config config)
     {
         return (exchange, chain) -> {
-            final DefaultHttpHeaders httpHeaders = new DefaultHttpHeaders();
-            ServerHttpRequest request = exchange.getRequest();
-            HttpMethod method = HttpMethod.valueOf(request.getMethod().toString());
-            HttpHeaders headers = request.getHeaders();
-            headers.forEach(httpHeaders::set);
-            String transferEncoding = headers.getFirst(HttpHeaders.TRANSFER_ENCODING);
-            boolean chunkedTransfer = "chunked".equalsIgnoreCase(transferEncoding);
-            HttpClient.create().request(method, "http://localhost:8082/test", req -> {
-                final HttpClientRequest proxyRequest = req.options(NettyPipeline.SendOptions::flushOnEach)
-                        .headers(httpHeaders)
-                        .chunkedTransfer(chunkedTransfer)
-                        .failOnServerError(false)
-                        .failOnClientError(false);
-
-                return proxyRequest.sendHeaders() //I shouldn't need this
-                        .send(request.getBody().map(dataBuffer ->
-                                ((NettyDataBuffer)dataBuffer).getNativeBuffer()));
-            }).doOnNext(res -> {
-                System.out.println(res);
-            });
             
+            ServerHttpRequest request = exchange.getRequest();
+            Flux<DataBuffer> body = request.getBody();
+            DataBuffer blockLast = body.blockLast();
+            InputStream asInputStream = null;
+            try
+            {
+                asInputStream = blockLast.asInputStream();
+                String string = IOUtils.toString(asInputStream, StandardCharsets.UTF_8);
+                ItemRequestXml converyToJavaBean = JaxbUtil.converyToJavaBean(string, ItemRequestXml.class);
+                ItemRequestXml input = inputClient.input(converyToJavaBean);
+                String convertToXml = JaxbUtil.convertToXml(input);
+                
+                System.out.println(convertToXml);
+                ServerHttpResponse response = exchange.getResponse();
+                DataBuffer wrap = response.bufferFactory().wrap(convertToXml.getBytes(StandardCharsets.UTF_8));
+                return response.writeWith(Mono.just(wrap));
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+            finally 
+            {
+                try
+                {
+                    asInputStream.close();
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+            /*MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
+            formData.add("name1","value1");
+            formData.add("name2","value2");
+            
+            Mono<String> bodyToMono = WebClient.create().post().uri("http://localhost:8082/input")
+            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+            .body(BodyInserters.fromFormData(formData))
+            .retrieve().bodyToMono(String.class);
+            
+            String block = bodyToMono.block();
+            System.out.println(block);*/
             return chain.filter(exchange);
         };
     }

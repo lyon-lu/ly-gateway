@@ -34,7 +34,7 @@ spring:
       - id: enterprise_route
         uri: lb://LY-SERVER
         predicates:
-          - Path= /test/**
+          - Path= sf/input/**
           
         filters:
           - DataPreprocess
