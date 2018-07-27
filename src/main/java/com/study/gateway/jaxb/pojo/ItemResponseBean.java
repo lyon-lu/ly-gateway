@@ -6,8 +6,11 @@
  */
 package com.study.gateway.jaxb.pojo;
 
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -21,7 +24,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name="Response")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ItemResponseXml extends BaseResponse
+public class ItemResponseBean extends BaseResponse
 {
     /**
     * @fields serialVersionUID : TODO
@@ -49,16 +52,62 @@ public class ItemResponseXml extends BaseResponse
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class ItemResponse
     {
-        private String code;
+        private String CompanyCode;
+        private String Result;
+        private String Remark;
+        private Integer TotalSize;
+        
+        @XmlElementWrapper(name="Items") 
+        private List<Item> Item;
 
-        public String getCode()
+        public String getCompanyCode()
         {
-            return code;
+            return CompanyCode;
         }
 
-        public void setCode(String code)
+        public void setCompanyCode(String companyCode)
         {
-            this.code = code;
+            CompanyCode = companyCode;
+        }
+
+        public String getResult()
+        {
+            return Result;
+        }
+
+        public void setResult(String result)
+        {
+            Result = result;
+        }
+
+        public String getRemark()
+        {
+            return Remark;
+        }
+
+        public void setRemark(String remark)
+        {
+            Remark = remark;
+        }
+
+        public Integer getTotalSize()
+        {
+            return TotalSize;
+        }
+
+        public void setTotalSize(Integer totalSize)
+        {
+            TotalSize = totalSize;
+        }
+
+        public List<Item> getItem()
+        {
+            return Item;
+        }
+
+        public void setItem(List<Item> item)
+        {
+            Item = item;
         }
     }
     

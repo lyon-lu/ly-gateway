@@ -6,11 +6,12 @@
  */
 package com.study.gateway.jaxb.pojo;
 
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import com.study.gateway.jaxb.pojo.BaseRequest;
 
 /**
  * <pre>
@@ -23,7 +24,7 @@ import com.study.gateway.jaxb.pojo.BaseRequest;
  */
 @XmlRootElement(name="Request")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ItemRequestXml extends BaseRequest
+public class ItemQueryRequestBean extends BaseRequest
 {
     /**
     * @fields serialVersionUID : TODO
@@ -35,32 +36,45 @@ public class ItemRequestXml extends BaseRequest
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class Body
     {
-        private ItemRequest ItemRequest;
+        private ItemQueryRequest ItemQueryRequest;
 
-        public ItemRequest getItemRequest()
+        public ItemQueryRequest getItemQueryRequest()
         {
-            return ItemRequest;
+            return ItemQueryRequest;
         }
 
-        public void setItemRequest(ItemRequest itemRequest)
+        public void setItemQueryRequest(ItemQueryRequest itemQueryRequest)
         {
-            ItemRequest = itemRequest;
+            ItemQueryRequest = itemQueryRequest;
         }
     }
     
     @XmlAccessorType(XmlAccessType.FIELD)
-    public static class ItemRequest
+    public static class ItemQueryRequest
     {
-        private String code;
+        private String CompanyCode;
+        
+        @XmlElementWrapper(name="SkuNoList") 
+        private List<String> SkuNo;
 
-        public String getCode()
+        public List<String> getSkuNo()
         {
-            return code;
+            return SkuNo;
         }
 
-        public void setCode(String code)
+        public void setSkuNo(List<String> skuNo)
         {
-            this.code = code;
+            SkuNo = skuNo;
+        }
+
+        public String getCompanyCode()
+        {
+            return CompanyCode;
+        }
+
+        public void setCompanyCode(String companyCode)
+        {
+            CompanyCode = companyCode;
         }
     }
 
