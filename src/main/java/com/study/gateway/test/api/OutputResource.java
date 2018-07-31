@@ -54,7 +54,7 @@ public class OutputResource
         
         String xmlStr = JaxbUtil.convertToXml(bean);
         
-        ItemResponseBean output = outputService.output(xmlStr);
+        ItemResponseBean output = outputService.sfOutput(xmlStr,ItemResponseBean.class);
         ItemResponse itemResponse = null;
         if(null != output)
         {

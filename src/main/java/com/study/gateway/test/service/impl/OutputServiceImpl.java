@@ -36,8 +36,9 @@ public class OutputServiceImpl implements OutputService
     @Resource
     private RestTemplate restTemplate;
     
+    @SuppressWarnings("unchecked")
     @Override
-    public ItemResponseBean output(String xml)
+    public <T> T sfOutput(String xml, Class<T> clazz)
     {
         // 设置form参数
         MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
@@ -56,8 +57,8 @@ public class OutputServiceImpl implements OutputService
         
         // xml字符串转javaBean
         String body = postForEntity.getBody();
-        ItemResponseBean itemResponseBean = JaxbUtil.converyToJavaBean(body, ItemResponseBean.class);
-        return itemResponseBean;
+        T responseBean = (T) JaxbUtil.converyToJavaBean(body, ItemResponseBean.class);
+        return responseBean;
     }
 
 }

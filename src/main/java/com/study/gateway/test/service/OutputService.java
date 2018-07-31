@@ -6,8 +6,6 @@
  */
 package com.study.gateway.test.service;
 
-import com.study.gateway.jaxb.pojo.ItemResponseBean;
-
 /**
  * <pre>
  * Description:
@@ -19,5 +17,5 @@ import com.study.gateway.jaxb.pojo.ItemResponseBean;
  */
 public interface OutputService
 {
-    ItemResponseBean output(String xml);
+    <T> T sfOutput(String xml, Class<T> clazz);
 }
