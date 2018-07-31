@@ -6,29 +6,20 @@
  */
 package com.study.gateway.test.api;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.annotation.Resource;
 
-import org.springframework.http.MediaType;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.reactive.function.BodyInserters;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import com.study.gateway.jaxb.pojo.BaseRequest.Head;
 import com.study.gateway.jaxb.pojo.ItemQueryRequestBean;
 import com.study.gateway.jaxb.pojo.ItemQueryRequestBean.Body;
 import com.study.gateway.jaxb.pojo.ItemQueryRequestBean.ItemQueryRequest;
 import com.study.gateway.jaxb.pojo.ItemResponseBean;
+import com.study.gateway.jaxb.pojo.ItemResponseBean.ItemResponse;
+import com.study.gateway.test.service.OutputService;
 import com.study.gateway.utils.JaxbUtil;
-
-import reactor.core.publisher.Mono;
 
 /**
  * <pre>
@@ -43,71 +34,40 @@ import reactor.core.publisher.Mono;
 public class OutputResource
 {
     @Resource
-    private RestTemplate restTemplate;
-    
+    private OutputService outputService;
     
     @RequestMapping(value = "output")
-    public Mono<ItemResponseBean> output(@RequestBody ItemQueryRequestBean xml)
+    public ItemResponse output(@RequestBody ItemQueryRequest query)
     {
-        ItemQueryRequestBean xmlBean = new ItemQueryRequestBean();
-        xmlBean.setLang("zh-CN");
-        xmlBean.setService("ITEM_QUERY_SERVICE");
+        ItemQueryRequestBean bean = new ItemQueryRequestBean();
+        bean.setLang("zh-CN");
+        bean.setService("ITEM_QUERY_SERVICE");
         
         Head head = new Head();
         head.setAccessCode("bvW2Fcx8Hb1OYzZaL2mY8A==");
         head.setCheckword("Pa2zfPtcCIvmhxYkfw5Bj6JgPmx63s4i");
-        xmlBean.setHead(head);
-        
-        ItemQueryRequest item = new ItemQueryRequest();
-        List<String> skuNoList = new ArrayList<>();
-        skuNoList.add("1");
-        item.setCompanyCode("COMMONCOMPANY");
-        item.setSkuNo(skuNoList);
+        bean.setHead(head);
         
         Body body = new Body();
-        body.setItemQueryRequest(item);
-        xmlBean.setBody(body);
-        String xmlStr = JaxbUtil.convertToXml(xmlBean);
+        body.setItemQueryRequest(query);
+        bean.setBody(body);
         
+        String xmlStr = JaxbUtil.convertToXml(bean);
         
-        MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
-        formData.add("logistics_interface", xmlStr);
-        formData.add("data_digest", "hello world");
-        
-        return WebClient.create().post().uri("http://bsp.sit.sf-express.com:8080/bsp-wms/OmsCommons")
-                .contentType(MediaType.APPLICATION_ATOM_XML)
-                .body(BodyInserters.fromFormData(formData))
-                .exchange().flatMap(x -> {
-                    Mono<ItemResponseBean> bodyToMono = x.bodyToMono(ItemResponseBean.class);
-                    return bodyToMono;
-                });
-       
-                /*final Function<Boolean, Health.Builder> healthBuilder = bool -> bool ? Health.up() : Health.down();
-                
-                final Function<Throwable, Health.Builder> throwableBuilder = e -> Health.down(new RuntimeException(e));
-                
-                final CompletableFuture<Health> subscription = status.thenApply(HttpStatus::is2xxSuccessful)
-                .thenApply(healthBuilder)
-                .exceptionally(throwableBuilder)
-                .thenApply(Health.Builder::build);
-                
-                final Function<Throwable, Health> health = e -> throwableBuilder.apply(e)
-                       .build();
-                return Try.of(subscription::get)
-                .getOrElseGet(health);*/
-        /*String xmlStr = JaxbUtil.convertToXml(xml);
-        
-        MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
-        formData.add("logistics_interface", xmlStr);
-        formData.add("data_digest", "hello world");
-        
-        Mono<String> bodyToMono = WebClient.create().post().uri("http://bsp.sit.sf-express.com:8080/bsp-wms/OmsCommons")
-        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-        .body(BodyInserters.fromObject(formData))
-        .retrieve().bodyToMono(String.class);
-        
-        
-        System.out.println("end");
-        return null;*/
+        ItemResponseBean output = outputService.output(xmlStr);
+        ItemResponse itemResponse = null;
+        if(null != output)
+        {
+            String resHead = output.getHead();
+            if("OK".equalsIgnoreCase(resHead))
+            {
+                itemResponse = output.getBody().getItemResponse();
+            }
+            else 
+            {
+                // 记录错误信息
+            }
+        }
+        return itemResponse;
     }
 }

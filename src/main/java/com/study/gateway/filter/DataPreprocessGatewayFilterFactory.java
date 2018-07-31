@@ -27,10 +27,6 @@ import org.springframework.util.ReflectionUtils;
 
 import com.study.gateway.client.InputClient;
 import com.study.gateway.common.CharConstant;
-import com.study.gateway.jaxb.pojo.BaseRequest.Head;
-import com.study.gateway.jaxb.pojo.ItemQueryRequestBean;
-import com.study.gateway.jaxb.pojo.ItemQueryRequestBean.Body;
-import com.study.gateway.jaxb.pojo.ItemQueryRequestBean.ItemQueryRequest;
 import com.study.gateway.utils.JaxbUtil;
 
 import reactor.core.publisher.Flux;
@@ -59,32 +55,6 @@ public class DataPreprocessGatewayFilterFactory extends AbstractGatewayFilterFac
     public GatewayFilter apply(Config config)
     {
         return (exchange, chain) -> {
-            
-            ItemQueryRequestBean xml = new ItemQueryRequestBean();
-            xml.setLang("zh-CN");
-            xml.setService("ITEM_QUERY_SERVICE");
-            
-            Head head = new Head();
-            head.setAccessCode("qwerty");
-            head.setCheckword("asdfgh");
-            xml.setHead(head);
-            
-            ItemQueryRequest item = new ItemQueryRequest();
-            
-            Body body1 = new Body();
-            xml.setBody(body1);
-            
-            
-            /*Mono<String> bodyToMono = WebClient.create().post()
-                    .uri("http://localhost:8081/gateway")
-                    .contentType(MediaType.APPLICATION_XML)
-                    .body(BodyInserters.fromObject(xml))
-                    .retrieve().bodyToMono(String.class);
-            
-            String block = bodyToMono.block();
-            System.out.println(block);*/
-            
-            
             
             ServerHttpRequest request = exchange.getRequest();
             
@@ -127,17 +97,6 @@ public class DataPreprocessGatewayFilterFactory extends AbstractGatewayFilterFac
                     e.printStackTrace();
                 }
             }
-            /*MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
-            formData.add("name1","value1");
-            formData.add("name2","value2");
-            
-            Mono<String> bodyToMono = WebClient.create().post().uri("http://localhost:8082/input")
-            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-            .body(BodyInserters.fromFormData(formData))
-            .retrieve().bodyToMono(String.class);
-            
-            String block = bodyToMono.block();
-            System.out.println(block);*/
             return chain.filter(exchange);
         };
     }

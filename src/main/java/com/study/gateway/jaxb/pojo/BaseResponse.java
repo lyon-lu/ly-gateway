@@ -11,6 +11,7 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlValue;
 
 /**
  * <pre>
@@ -37,6 +38,49 @@ public class BaseResponse implements Serializable
     
     private String Head;
     
+    private Error Error;
+    
+    @XmlAccessorType(XmlAccessType.FIELD)
+    public static class Error
+    {
+        @XmlAttribute
+        private String code;
+
+        @XmlValue
+        private String errorInfo;
+        
+        public String getErrorInfo()
+        {
+            return errorInfo;
+        }
+
+        public void setErrorInfo(String errorInfo)
+        {
+            this.errorInfo = errorInfo;
+        }
+
+        public String getCode()
+        {
+            return code;
+        }
+
+        public void setCode(String code)
+        {
+            this.code = code;
+        }
+        
+    }
+    
+    public Error getError()
+    {
+        return Error;
+    }
+
+    public void setError(Error error)
+    {
+        Error = error;
+    }
+
     public String getService()
     {
         return service;
