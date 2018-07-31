@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.study.gateway.client.fallback.InputClientFallback;
-import com.study.gateway.jaxb.pojo.ItemQueryRequestBean;
-import com.study.gateway.jaxb.pojo.ItemResponseBean;
+import com.study.gateway.jaxb.pojo.ItemQueryRequestBean.ItemQueryRequest;
+import com.study.gateway.jaxb.pojo.ItemResponseBean.ItemResponse;
 
 /**
  * <pre>
@@ -27,5 +27,5 @@ import com.study.gateway.jaxb.pojo.ItemResponseBean;
 public interface InputClient
 {
     @RequestMapping(value = "input")
-    ItemResponseBean input(@RequestBody ItemQueryRequestBean xml);
+    ItemResponse input(@RequestBody ItemQueryRequest xml);
 }

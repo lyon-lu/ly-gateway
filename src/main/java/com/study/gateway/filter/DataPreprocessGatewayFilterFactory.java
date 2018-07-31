@@ -68,7 +68,6 @@ public class DataPreprocessGatewayFilterFactory extends AbstractGatewayFilterFac
             {
                 asInputStream = blockLast.asInputStream();
                 String xmlResource = IOUtils.toString(asInputStream, StandardCharsets.UTF_8);
-                
                 String requestBeanName = config.getRequestBean().get(methodName);
                 
                 Class<?> calss = Class.forName(requestBeanName);
