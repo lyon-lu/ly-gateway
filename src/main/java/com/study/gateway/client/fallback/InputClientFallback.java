@@ -9,8 +9,8 @@ package com.study.gateway.client.fallback;
 import org.springframework.stereotype.Component;
 
 import com.study.gateway.client.InputClient;
-import com.study.gateway.jaxb.pojo.ItemQueryRequestBean.ItemQueryRequest;
-import com.study.gateway.jaxb.pojo.ItemResponseBean.ItemResponse;
+import com.study.gateway.jaxb.pojo.ItemQueryRequestBean;
+import com.study.gateway.jaxb.pojo.ItemResponseBean;
 
 /**
  * <pre>
@@ -25,7 +25,7 @@ import com.study.gateway.jaxb.pojo.ItemResponseBean.ItemResponse;
 public class InputClientFallback extends AbstractFallback implements InputClient
 {
     @Override
-    public ItemResponse input(ItemQueryRequest xml)
+    public ItemResponseBean input(ItemQueryRequestBean query)
     {
         logger.error("input fallback");
         return null;
