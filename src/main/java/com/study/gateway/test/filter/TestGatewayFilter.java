@@ -4,7 +4,7 @@
  *
  * TestGatewayFilter.java created on Jun 6, 2018 5:42:48 PM by Lyon Lu 
  */
-package com.study.gateway.filter;
+package com.study.gateway.test.filter;
 
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;

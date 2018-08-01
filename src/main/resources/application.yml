@@ -41,7 +41,7 @@ spring:
             args:
               request-bean:
                 input: com.study.gateway.jaxb.pojo.ItemQueryRequestBean
-                
+      
 custom:
     replenishRate: 1
     burstCapacity: 2

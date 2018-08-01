@@ -4,7 +4,7 @@
  *
  * TestGlobalFilter.java created on Jun 6, 2018 5:37:26 PM by Lyon Lu 
  */
-package com.study.gateway.filter;
+package com.study.gateway.test.filter;
 
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
