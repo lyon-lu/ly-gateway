@@ -4,7 +4,7 @@
  *
  * OutputResource.java created on Jul 23, 2018 4:41:27 PM by Lyon Lu 
  */
-package com.study.gateway.test.api;
+package com.study.gateway.output.api;
 
 import javax.annotation.Resource;
 
@@ -18,7 +18,7 @@ import com.study.gateway.jaxb.pojo.ItemQueryRequestBean.Body;
 import com.study.gateway.jaxb.pojo.ItemQueryRequestBean.ItemQueryRequest;
 import com.study.gateway.jaxb.pojo.ItemResponseBean;
 import com.study.gateway.jaxb.pojo.ItemResponseBean.ItemResponse;
-import com.study.gateway.test.service.OutputService;
+import com.study.gateway.output.service.OutputService;
 import com.study.gateway.utils.JaxbUtil;
 
 /**
@@ -54,7 +54,7 @@ public class OutputResource
         
         String xmlStr = JaxbUtil.convertToXml(bean);
         
-        ItemResponseBean output = outputService.sfOutput(xmlStr,ItemResponseBean.class);
+        ItemResponseBean output = outputService.omsOutput(xmlStr,ItemResponseBean.class);
         ItemResponse itemResponse = null;
         if(null != output)
         {

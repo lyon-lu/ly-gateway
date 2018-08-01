@@ -34,13 +34,13 @@ spring:
       - id: enterprise_route
         uri: lb://LY-SERVER
         predicates:
-          - Path= /sf/input/**
+          - Path= /api/**
           
         filters:
-          - name: DataPreprocess
+          - name: DataProcess
             args:
-              request-bean:
-                input: com.study.gateway.jaxb.pojo.ItemQueryRequestBean
+              caller-service:
+                oms: "#{@omsInputService}"
       
 custom:
     replenishRate: 1

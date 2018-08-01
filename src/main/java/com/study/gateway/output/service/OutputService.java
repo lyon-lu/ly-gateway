@@ -4,7 +4,7 @@
  *
  * OutputService.java created on Jul 31, 2018 11:22:00 AM by Lyon Lu 
  */
-package com.study.gateway.test.service;
+package com.study.gateway.output.service;
 
 /**
  * <pre>
@@ -17,5 +17,5 @@ package com.study.gateway.test.service;
  */
 public interface OutputService
 {
-    <T> T sfOutput(String xml, Class<T> clazz);
+    <T> T omsOutput(String xml, Class<T> clazz);
 }

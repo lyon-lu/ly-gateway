@@ -8,7 +8,7 @@ package com.study.gateway.client.fallback;
 
 import org.springframework.stereotype.Component;
 
-import com.study.gateway.client.InputClient;
+import com.study.gateway.client.OmsInputClient;
 import com.study.gateway.jaxb.pojo.ItemQueryRequestBean;
 import com.study.gateway.jaxb.pojo.ItemResponseBean;
 
@@ -22,7 +22,7 @@ import com.study.gateway.jaxb.pojo.ItemResponseBean;
  * </pre>
  */
 @Component
-public class InputClientFallback extends AbstractFallback implements InputClient
+public class InputClientFallback extends AbstractFallback implements OmsInputClient
 {
     @Override
     public ItemResponseBean input(ItemQueryRequestBean query)

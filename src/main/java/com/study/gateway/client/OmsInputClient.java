@@ -24,7 +24,7 @@ import com.study.gateway.jaxb.pojo.ItemResponseBean;
  * </pre>
  */
 @FeignClient(name = "LY-SERVER", fallback = InputClientFallback.class)
-public interface InputClient
+public interface OmsInputClient
 {
     @RequestMapping(value = "input")
     ItemResponseBean input(@RequestBody ItemQueryRequestBean query);

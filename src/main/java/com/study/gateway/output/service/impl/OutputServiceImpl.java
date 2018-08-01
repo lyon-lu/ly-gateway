@@ -4,7 +4,7 @@
  *
  * OutputServiceImpl.java created on Jul 31, 2018 11:22:21 AM by Lyon Lu 
  */
-package com.study.gateway.test.service.impl;
+package com.study.gateway.output.service.impl;
 
 import javax.annotation.Resource;
 
@@ -18,7 +18,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import com.study.gateway.jaxb.pojo.ItemResponseBean;
-import com.study.gateway.test.service.OutputService;
+import com.study.gateway.output.service.OutputService;
 import com.study.gateway.utils.JaxbUtil;
 
 /**
@@ -38,7 +38,7 @@ public class OutputServiceImpl implements OutputService
     
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T sfOutput(String xml, Class<T> clazz)
+    public <T> T omsOutput(String xml, Class<T> clazz)
     {
         // 设置form参数
         MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
